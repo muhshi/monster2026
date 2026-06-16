@@ -1,0 +1,25 @@
+# Configuration files with credentials
+config.json
+
+# Local files
+pengawas_mapping.json
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# CSV data files (Contains PII / Names / Emails)
+*.csv
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Backup folders
+backup_v1/
+
+# OS specific files
+.DS_Store
+Thumbs.db

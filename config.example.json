@@ -1,0 +1,15 @@
+{
+  "database": {
+    "engine": "mysql",
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "password_kamu_disini",
+    "database_name": "nama_database",
+    "sqlite_file": "monitoring_se2026.db"
+  },
+  "fasih_api": {
+    "surveyPeriodId": "fd68e454-ba45-4b85-8205-f3bf777ded24",
+    "roleIdPencacah": "6d7d919a-45e5-4779-bb87-2905b49fd31a",
+    "roleIdPengawas": "93bcf446-c4c1-4462-8ed0-4b0f7ae89e52"
+  }
+}
