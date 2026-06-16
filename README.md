@@ -1,6 +1,6 @@
-# Monitoring Progress Lapangan SE2026 BPS
+# MONSTER 2026 (MONItoring SE Ter-sembunyi 2026)
 
-Script Python ini digunakan untuk melakukan penarikan (*scraping*) data Monitoring Progress Lapangan dan Pemetaan Pengawas secara otomatis dari Dashboard web FASIH (Flexible Authentic Survey Instrument in Harmony) BPS.
+**MONSTER 2026** adalah sebuah tool scraping pintar berbasis Python yang dirancang secara spesifik untuk melakukan penarikan data Monitoring Progress Lapangan dan Pemetaan Pengawas secara otomatis dari Dashboard web FASIH (Flexible Authentic Survey Instrument in Harmony) BPS. Mengadopsi teknologi Selenium *Remote Debugging*, aplikasi ini beroperasi secara transparan dan "tersembunyi" dari deteksi bot server WAF Cloudflare.
 
 ## Fitur Utama
 
@@ -122,8 +122,17 @@ python3 monitoring_lapangan.py
   **Solusi:** Kill paksa (`pkill -f "Google Chrome"`) semua Chrome yang ada di task manager, lalu buka ulang Chrome lewat terminal yang sudah dicantumkan di Langkah 2.
 - **Kosongnya Sebagian Email Pengawas**
   Saat pencacah di-*fetch*, script akan menengok *lookup file* `pengawas_mapping.json`. Pastikan file tersebut aktual dengan menjalankan script `python3 fetch_pengawas.py` terlebih dahulu jika dirasa ada pengawas yang kurang.
-- **Gagal Mengambil Data (CAPTCHA Terdeteksi / WAF Cloudflare)**
-  Script sudah dilengkapi pendeteksi CAPTCHA otomatis. Jangan mematikan script. Jendela Terminal kamu akan berbunyi dan meminta kamu: *"Buka browser dan selesaikan CAPTCHA-nya"*. Kamu cukup klik/centang kotak CAPTCHA di dalam browser Chrome, lalu tekan tombol `ENTER` pada terminal untuk menginstruksikan python melanjutkan penarikan tepat dari nomor halaman terakhir.
+### Menangani Penolakan Server (CAPTCHA Terdeteksi / WAF Cloudflare)
+
+Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi jumlah request (*Rate Limiting*). Jika script mendeteksi bahwa IP-mu diblokir sementara dan dilempar ke halaman validasi CAPTCHA, program ini **tidak akan *crash* atau keluar**, melainkan akan masuk ke mode "Jeda Interaktif" (Pause).
+
+**Apa yang harus kamu lakukan jika terkena CAPTCHA?**
+1. Jendela terminalmu akan berbunyi dan menampilkan peringatan tebal: `⚠️ CAPTCHA TERDETEKSI!`.
+2. Segera buka jendela Chrome yang dibuat oleh script (Chrome debugging yang terbuka otomatis sebelumnya).
+3. Di sana, kamu akan melihat halaman peringatan Cloudflare/CAPTCHA ("Verify you are human").
+4. Klik/centang kotak CAPTCHA tersebut secara manual layaknya manusia biasa hingga berhasil masuk kembali ke dashboard.
+5. Kembali ke jendela Terminal, lalu **tekan tombol `ENTER`**.
+6. Ajaib! Python akan langsung melanjutkan proses pengunduhan (*resume*) tepat dari halaman terakhir yang sempat terputus tanpa ada satu pun data yang terlewat.
 
 ---
 ## Changelog
