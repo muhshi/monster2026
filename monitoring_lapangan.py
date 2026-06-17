@@ -44,6 +44,7 @@ def init_db(config):
             email_pengawas VARCHAR(100),
             total_beban INT,
             status_open INT DEFAULT 0,
+            status_draft INT DEFAULT 0,
             status_submitted INT DEFAULT 0,
             status_approved INT DEFAULT 0,
             status_rejected INT DEFAULT 0,
@@ -52,6 +53,11 @@ def init_db(config):
         )
         """
         cursor.execute(create_table_query)
+        # Auto-migrate: Tambahkan kolom status_draft jika belum ada di tabel lama
+        try:
+            cursor.execute("ALTER TABLE monitoring_se2026 ADD COLUMN status_draft INTEGER DEFAULT 0")
+        except sqlite3.OperationalError:
+            pass
         connection.commit()
         return connection, 'sqlite'
         
@@ -74,6 +80,7 @@ def init_db(config):
             email_pengawas VARCHAR(100),
             total_beban INT,
             status_open INT DEFAULT 0,
+            status_draft INT DEFAULT 0,
             status_submitted INT DEFAULT 0,
             status_approved INT DEFAULT 0,
             status_rejected INT DEFAULT 0,
@@ -82,6 +89,11 @@ def init_db(config):
         )
         """
         cursor.execute(create_table_query)
+        # Auto-migrate: Tambahkan kolom status_draft jika belum ada di tabel lama
+        try:
+            cursor.execute("ALTER TABLE monitoring_se2026 ADD COLUMN status_draft INT DEFAULT 0 AFTER status_open")
+        except mysql.connector.Error:
+            pass
         connection.commit()
         return connection, 'mysql'
     else:
@@ -267,6 +279,7 @@ def process_and_save(connection, engine_type, page_data, current_date):
             total_beban = region.get("total", 0)
             
             status_open = 0
+            status_draft = 0
             status_submitted = 0
             status_approved = 0
             status_rejected = 0
@@ -278,6 +291,8 @@ def process_and_save(connection, engine_type, page_data, current_date):
                 
                 if "OPEN" in status_name:
                     status_open = count
+                elif "DRAFT" in status_name:
+                    status_draft = count
                 elif "SUBMITTED" in status_name:
                     status_submitted = count
                 elif "COMPLETED" in status_name or "APPROVED" in status_name:
@@ -287,7 +302,7 @@ def process_and_save(connection, engine_type, page_data, current_date):
             
             rows_to_insert.append((
                 current_date, region_code, email_pencacah, 
-                total_beban, status_open, status_submitted, status_approved, status_rejected
+                total_beban, status_open, status_draft, status_submitted, status_approved, status_rejected
             ))
             
     if rows_to_insert:
@@ -297,12 +312,13 @@ def process_and_save(connection, engine_type, page_data, current_date):
                 upsert_query = """
                 INSERT INTO monitoring_se2026 (
                     tanggal_tarik, region_code, email_pencacah,
-                    total_beban, status_open, status_submitted, status_approved, status_rejected
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    total_beban, status_open, status_draft, status_submitted, status_approved, status_rejected
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE 
                     email_pencacah = VALUES(email_pencacah),
                     total_beban = VALUES(total_beban),
                     status_open = VALUES(status_open),
+                    status_draft = VALUES(status_draft),
                     status_submitted = VALUES(status_submitted),
                     status_approved = VALUES(status_approved),
                     status_rejected = VALUES(status_rejected)
@@ -311,12 +327,13 @@ def process_and_save(connection, engine_type, page_data, current_date):
                 upsert_query = """
                 INSERT INTO monitoring_se2026 (
                     tanggal_tarik, region_code, email_pencacah,
-                    total_beban, status_open, status_submitted, status_approved, status_rejected
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    total_beban, status_open, status_draft, status_submitted, status_approved, status_rejected
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(tanggal_tarik, region_code) DO UPDATE SET
                     email_pencacah = excluded.email_pencacah,
                     total_beban = excluded.total_beban,
                     status_open = excluded.status_open,
+                    status_draft = excluded.status_draft,
                     status_submitted = excluded.status_submitted,
                     status_approved = excluded.status_approved,
                     status_rejected = excluded.status_rejected

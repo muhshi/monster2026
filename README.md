@@ -137,6 +137,7 @@ Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi ju
 ---
 ## Changelog
 
+- **Added**: Fitur auto-capture dan penyimpanan `status_draft` ke dalam skema tabel database `monitoring_se2026` lengkap dengan *auto-migration* kolom secara otomatis.
 - **Added**: Implementasi `run.sh` dan `run.bat` untuk mempermudah operasional end-user.
 - **Added**: Interaktif CAPTCHA Solver *wait mechanism* via Selenium yang menjeda proses perulangan selagi user merampungkan verifikasi Human-Cloudflare.
 - **Changed**: Peralihan dari Request Library API langsung ke implementasi eksekusi `fetch()` JS payload secara native di dalam *local session browser* (menggunakan `execute_async_script()`).
