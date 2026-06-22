@@ -11,7 +11,7 @@ echo INSTRUKSI PENTING SEBELUM MULAI:
 echo --------------------------------
 echo Pastikan kamu sudah membuka Chrome khusus dengan mode debugging!
 echo Jika Chrome gagal tersambung, matikan Chrome di Task Manager lalu buka CMD:
-echo "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+echo "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug"
 echo.
 echo Setelah Chrome terbuka, login ke FASIH dan pastikan sampai di Dashboard.
 echo Tekan ENTER di bawah ini jika Chrome sudah siap dan login...

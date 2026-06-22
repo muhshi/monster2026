@@ -96,7 +96,7 @@ Matikan sepenuhnya aplikasi Google Chrome (jangan ada tab/jendela yang tersisa).
 - **Windows:**
   Buka command prompt (CMD) dan jalankan:
   ```cmd
-  "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+  "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug"
   ```
 
 **LANGKAH 3: Login ke Web FASIH**
@@ -143,3 +143,4 @@ Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi ju
 - **Changed**: Peralihan dari Request Library API langsung ke implementasi eksekusi `fetch()` JS payload secara native di dalam *local session browser* (menggunakan `execute_async_script()`).
 - **Fixed**: Mengembalikan Size Fetch Page ke Size default `5` per *request body* untuk mencegah `HTTP 400 Bad Request` dari WAF BPS.
 - **Fixed**: Penghapusan manual cookie XSRF di `config.json` karena Script Selenium saat ini sudah diatur mampu melakukan token scrapping dinamis dari Document Cookie browser berjalan.
+- **Fixed**: Menambahkan flag `--user-data-dir` pada eksekusi Google Chrome di `run.bat` dan panduan README agar fitur *remote debugging* pada Windows berfungsi meski ada Chrome lain yang sedang aktif.
