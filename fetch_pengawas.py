@@ -200,6 +200,17 @@ def main():
     
     try:
         with connection.cursor() as cursor:
+            # Create table if not exists
+            create_tbl = """
+            CREATE TABLE IF NOT EXISTS alokasi_pengawas (
+                region_code VARCHAR(20) PRIMARY KEY,
+                email_pengawas VARCHAR(100),
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )
+            """
+            cursor.execute(create_tbl)
+            connection.commit()
+            
             while True:
                 print(f"Fetching Pengawas page {page}...")
                 page_data = fetch_page_selenium(driver, page, config)
