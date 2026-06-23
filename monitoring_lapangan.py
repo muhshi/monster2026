@@ -57,6 +57,11 @@ def init_db(config):
             cursor.execute("ALTER TABLE monitoring_se2026 ADD COLUMN status_draft INTEGER DEFAULT 0")
         except sqlite3.OperationalError:
             pass
+        # Auto-migrate: Hapus kolom email_pengawas biar tidak bingung
+        try:
+            cursor.execute("ALTER TABLE monitoring_se2026 DROP COLUMN email_pengawas")
+        except:
+            pass
         connection.commit()
         return connection, 'sqlite'
         
@@ -91,6 +96,11 @@ def init_db(config):
         try:
             cursor.execute("ALTER TABLE monitoring_se2026 ADD COLUMN status_draft INT DEFAULT 0 AFTER status_open")
         except mysql.connector.Error:
+            pass
+        # Auto-migrate: Hapus kolom email_pengawas biar tidak bingung
+        try:
+            cursor.execute("ALTER TABLE monitoring_se2026 DROP COLUMN email_pengawas")
+        except:
             pass
         connection.commit()
         return connection, 'mysql'
