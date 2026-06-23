@@ -44,8 +44,17 @@ def open_browser_and_login():
     print(f"\n[DEBUG] URL saat ini : {driver.current_url}")
     print(f"[DEBUG] Title halaman: {driver.title}")
     
-    # Cek apakah sudah login
-    if "sso.bps.go.id" in driver.current_url or "login" in driver.current_url.lower():
+    # Cek apakah sudah login atau berada di tab yang salah
+    current_url = driver.current_url.lower()
+    
+    if "new-tab-page" in current_url or "chrome://" in current_url:
+        print("\n  ⚠️ PERHATIAN: Tab aktif kamu saat ini adalah 'New Tab' kosong!")
+        print("  Browser akan menolak script jika tidak berada di halaman web BPS.")
+        print("  Silakan ketik manual 'fasih-sm.bps.go.id' di address bar, lalu login.")
+        input("\n>>> Tekan ENTER setelah kamu membuka FASIH dan login... ")
+        current_url = driver.current_url.lower()
+
+    if "sso.bps.go.id" in current_url or "login" in current_url:
         print("\n  Kamu belum login. Silakan login dulu di browser.")
         input("\n>>> Tekan ENTER setelah login berhasil... ")
         print(f"\n[DEBUG] URL setelah login : {driver.current_url}")

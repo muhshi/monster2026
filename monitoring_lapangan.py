@@ -41,7 +41,6 @@ def init_db(config):
             tanggal_tarik DATE,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
-            email_pengawas VARCHAR(100),
             total_beban INT,
             status_open INT DEFAULT 0,
             status_draft INT DEFAULT 0,
@@ -77,7 +76,6 @@ def init_db(config):
             tanggal_tarik DATE,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
-            email_pengawas VARCHAR(100),
             total_beban INT,
             status_open INT DEFAULT 0,
             status_draft INT DEFAULT 0,
@@ -125,6 +123,11 @@ def open_browser_and_login():
     print(f"\n[DEBUG] URL saat ini: {driver.current_url}")
     print(f"[DEBUG] Title: {driver.title}")
     
+    current_url = driver.current_url.lower()
+    if "new-tab-page" in current_url or "chrome://" in current_url:
+        print("\n  ⚠️ PERHATIAN: Tab aktif kamu saat ini adalah 'New Tab' kosong!")
+        print("  Silakan ketik manual 'fasih-sm.bps.go.id' di address bar, lalu login.")
+        
     print("\n" + "="*60)
     print("  INSTRUKSI:")
     print("  1. Login ke FASIH di browser yang terbuka")
@@ -132,7 +135,7 @@ def open_browser_and_login():
     print("  3. Kembali ke terminal ini")
     print("  4. Tekan ENTER untuk mulai menarik data")
     print("="*60)
-    input("\n>>> Tekan ENTER setelah login berhasil... ")
+    input("\n>>> Tekan ENTER setelah login berhasil (dan pastikan tab FASIH tetap aktif)... ")
     
     print(f"\n[DEBUG] URL setelah login: {driver.current_url}")
     
