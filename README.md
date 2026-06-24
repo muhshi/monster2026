@@ -144,3 +144,5 @@ Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi ju
 - **Fixed**: Mengembalikan Size Fetch Page ke Size default `5` per *request body* untuk mencegah `HTTP 400 Bad Request` dari WAF BPS.
 - **Fixed**: Penghapusan manual cookie XSRF di `config.json` karena Script Selenium saat ini sudah diatur mampu melakukan token scrapping dinamis dari Document Cookie browser berjalan.
 - **Fixed**: Menambahkan flag `--user-data-dir` pada eksekusi Google Chrome di `run.bat` dan panduan README agar fitur *remote debugging* pada Windows berfungsi meski ada Chrome lain yang sedang aktif.
+- **Changed (24 Juni 2026)**: Mengganti WebDriver Chrome standar dengan `undetected_chromedriver` (dikonfigurasi untuk Chrome v149) pada `monitoring_lapangan.py` guna menghindari deteksi WAF/bot block.
+- **Changed (24 Juni 2026)**: Memperbesar jeda antar request (*sleep time*) dari 1-3 detik menjadi 4-8 detik secara acak untuk mengurangi risiko terpicu oleh *rate limiting* WAF.

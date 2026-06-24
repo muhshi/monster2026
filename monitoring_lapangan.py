@@ -3,7 +3,7 @@ import time
 import os
 import random
 from datetime import datetime
-from selenium import webdriver
+import undetected_chromedriver as uc
 from selenium.webdriver.chrome.options import Options
 
 # ========================================
@@ -114,18 +114,12 @@ def open_browser_and_login():
     print("  MEMBUKA BROWSER CHROME...")
     print("="*60)
     
-    chrome_options = Options()
+    chrome_options = uc.ChromeOptions()
     chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option("useAutomationExtension", False)
-    chrome_options.add_experimental_option("detach", True)
     
-    driver = webdriver.Chrome(options=chrome_options)
-    
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
-    })
+    # Gunakan undetected_chromedriver untuk mem-bypass deteksi bot Cloudflare/F5
+    # Parameter version_main=149 ditambahkan karena browser Chrome Anda versi 149.
+    driver = uc.Chrome(options=chrome_options, version_main=149)
     
     driver.get("https://fasih-sm.bps.go.id")
     time.sleep(5)
@@ -399,8 +393,8 @@ def main():
                 break
                 
             page += 1
-            # Jeda kecil antar request (tidak perlu lama karena ini dari browser asli)
-            sleep_time = random.uniform(1, 3)
+            # Jeda diperbesar agar tidak terdeteksi rate-limiting WAF (Cloudflare/F5)
+            sleep_time = random.uniform(4, 8)
             time.sleep(sleep_time)
             
         print(f"\n{'='*50}")

@@ -246,7 +246,8 @@ def main():
                     break
                     
                 page += 1
-                sleep_time = random.uniform(1, 3)
+                # Jeda diperbesar agar tidak terdeteksi rate-limiting WAF
+                sleep_time = random.uniform(4, 8)
                 time.sleep(sleep_time)
             
             print(f"\n{'='*50}")
