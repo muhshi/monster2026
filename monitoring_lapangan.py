@@ -38,7 +38,7 @@ def init_db(config):
         create_table_query = """
         CREATE TABLE IF NOT EXISTS monitoring_se2026 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            tanggal_tarik DATE,
+            tanggal_tarik DATETIME,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
             total_beban INT,
@@ -78,7 +78,7 @@ def init_db(config):
         create_table_query = """
         CREATE TABLE IF NOT EXISTS monitoring_se2026 (
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
-            tanggal_tarik DATE,
+            tanggal_tarik DATETIME,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
             total_beban INT,
@@ -364,7 +364,7 @@ def main():
     connection, engine_type = init_db(config)
     
     try:
-        current_date = datetime.now().strftime('%Y-%m-%d')
+        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         page = 0
         total_records_inserted = 0
         
