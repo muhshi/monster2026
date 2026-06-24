@@ -7,6 +7,10 @@ echo.
 
 cd /d "%~dp0"
 
+echo Memeriksa dan menjalankan migrasi database...
+python migrate_tanggal_datetime.py
+echo.
+
 echo INSTRUKSI PENTING SEBELUM MULAI:
 echo --------------------------------
 echo Pastikan kamu sudah membuka Chrome khusus dengan mode debugging!

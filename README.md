@@ -148,3 +148,5 @@ Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi ju
 - **Changed (24 Juni 2026)**: Memperbesar jeda antar request (*sleep time*) dari 1-3 detik menjadi 4-8 detik secara acak untuk mengurangi risiko terpicu oleh *rate limiting* WAF.
 - **Added (24 Juni 2026)**: Membuat script migrasi `migrate_tanggal_datetime.py` untuk mengubah tipe data kolom `tanggal_tarik` dari `DATE` menjadi `DATETIME`.
 - **Changed (24 Juni 2026)**: Memperbarui penulisan format tanggal di `monitoring_lapangan.py` agar menyimpan waktu detail (YYYY-MM-DD HH:MM:SS) sehingga data lawas tetap aman dan data baru tercatat dengan timestamp lengkap.
+- **Added (24 Juni 2026)**: Menambahkan pengecekan tipe kolom di `migrate_tanggal_datetime.py` agar dilewati jika kolom `tanggal_tarik` sudah bertipe `DATETIME` atau tabel belum terbentuk.
+- **Added (24 Juni 2026)**: Mengintegrasikan eksekusi migrasi otomatis pada berkas `run.bat` dan `run.sh` saat program pertama kali dibuka.

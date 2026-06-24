@@ -7,6 +7,10 @@ echo ""
 
 cd "$(dirname "$0")"
 
+echo "Memeriksa dan menjalankan migrasi database..."
+python3 migrate_tanggal_datetime.py
+echo ""
+
 echo "Menyiapkan browser Chrome khusus (terisolasi)..."
 mkdir -p /tmp/chrome-debug
 nohup /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/tmp/chrome-debug" > /dev/null 2>&1 &
