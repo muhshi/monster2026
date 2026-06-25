@@ -38,7 +38,7 @@ def init_db(config):
         create_table_query = """
         CREATE TABLE IF NOT EXISTS monitoring_se2026 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            tanggal_tarik DATETIME,
+            tanggal_tarik DATE NOT NULL,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
             total_beban INT,
@@ -48,7 +48,7 @@ def init_db(config):
             status_approved INT DEFAULT 0,
             status_rejected INT DEFAULT 0,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE (tanggal_tarik, region_code)
+            UNIQUE (tanggal_tarik, region_code, email_pencacah)
         )
         """
         cursor.execute(create_table_query)
@@ -78,7 +78,7 @@ def init_db(config):
         create_table_query = """
         CREATE TABLE IF NOT EXISTS monitoring_se2026 (
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
-            tanggal_tarik DATETIME,
+            tanggal_tarik DATE NOT NULL,
             region_code VARCHAR(20),
             email_pencacah VARCHAR(100),
             total_beban INT,
@@ -88,7 +88,7 @@ def init_db(config):
             status_approved INT DEFAULT 0,
             status_rejected INT DEFAULT 0,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_daily_region (tanggal_tarik, region_code)
+            UNIQUE KEY unique_daily_region_pencacah (tanggal_tarik, region_code, email_pencacah)
         )
         """
         cursor.execute(create_table_query)
@@ -364,7 +364,7 @@ def main():
     connection, engine_type = init_db(config)
     
     try:
-        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        current_date = datetime.now().strftime('%Y-%m-%d')  # date-only agar upsert per hari bekerja
         page = 0
         total_records_inserted = 0
         
