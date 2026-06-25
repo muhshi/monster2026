@@ -328,7 +328,8 @@ def process_and_save(connection, engine_type, page_data, current_date):
                     status_draft = VALUES(status_draft),
                     status_submitted = VALUES(status_submitted),
                     status_approved = VALUES(status_approved),
-                    status_rejected = VALUES(status_rejected)
+                    status_rejected = VALUES(status_rejected),
+                    updated_at = NOW()
                 """
             else:
                 upsert_query = """
@@ -336,14 +337,14 @@ def process_and_save(connection, engine_type, page_data, current_date):
                     tanggal_tarik, region_code, email_pencacah,
                     total_beban, status_open, status_draft, status_submitted, status_approved, status_rejected
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(tanggal_tarik, region_code) DO UPDATE SET
-                    email_pencacah = excluded.email_pencacah,
+                ON CONFLICT(tanggal_tarik, region_code, email_pencacah) DO UPDATE SET
                     total_beban = excluded.total_beban,
                     status_open = excluded.status_open,
                     status_draft = excluded.status_draft,
                     status_submitted = excluded.status_submitted,
                     status_approved = excluded.status_approved,
-                    status_rejected = excluded.status_rejected
+                    status_rejected = excluded.status_rejected,
+                    updated_at = CURRENT_TIMESTAMP
                 """
             cursor.executemany(upsert_query, rows_to_insert)
             connection.commit()
