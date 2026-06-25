@@ -150,3 +150,6 @@ Website FASIH dilindungi oleh sistem keamanan Cloudflare (WAF) yang membatasi ju
 - **Changed (24 Juni 2026)**: Memperbarui penulisan format tanggal di `monitoring_lapangan.py` agar menyimpan waktu detail (YYYY-MM-DD HH:MM:SS) sehingga data lawas tetap aman dan data baru tercatat dengan timestamp lengkap.
 - **Added (24 Juni 2026)**: Menambahkan pengecekan tipe kolom di `migrate_tanggal_datetime.py` agar dilewati jika kolom `tanggal_tarik` sudah bertipe `DATETIME` atau tabel belum terbentuk.
 - **Added (24 Juni 2026)**: Mengintegrasikan eksekusi migrasi otomatis pada berkas `run.bat` dan `run.sh` saat program pertama kali dibuka.
+- **Fixed (25 Juni 2026)**: Mengubah format `current_date` di `monitoring_lapangan.py` dari full DATETIME (`%Y-%m-%d %H:%M:%S`) ke DATE-only (`%Y-%m-%d`) agar mekanisme UPSERT per hari berjalan benar (sebelumnya setiap run membuat row baru karena detik berbeda).
+- **Fixed (25 Juni 2026)**: Memperbaiki UNIQUE KEY tabel `monitoring_se2026` dari `(tanggal_tarik, region_code)` menjadi `(tanggal_tarik, region_code, email_pencacah)` agar data setiap pencacah per wilayah per hari tersimpan sebagai baris tersendiri dan tidak saling overwrite.
+- **Added (25 Juni 2026)**: Membuat script `migrate_monitoring_schema.py` untuk migrasi skema DB existing (ubah `tanggal_tarik` DATETIME→DATE dan perbaiki UNIQUE KEY) tanpa menghapus data.
