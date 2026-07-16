@@ -159,7 +159,7 @@ def fetch_page_selenium(driver, page_num, config, max_retries=3):
     payload = {
         "surveyPeriodId": api_cfg['surveyPeriodId'],
         "surveyRoleId": api_cfg['roleIdPencacah'],
-        "size": 5,
+        "size": 10,
         "page": page_num,
         "search": "",
         "target": "TARGET_ONLY",
@@ -277,6 +277,14 @@ def process_and_save(connection, engine_type, page_data, current_date):
     content = page_data["content"]
     rows_to_insert = []
     
+    # Kumpulkan ringkasan untuk debug
+    page_total_open = 0
+    page_total_draft = 0
+    page_total_submitted = 0
+    page_total_approved = 0
+    page_total_rejected = 0
+    unknown_statuses = set()
+    
     for item in content:
         email_pencacah = item.get("email", "")
         region_summary = item.get("regionSummary", [])
@@ -297,20 +305,37 @@ def process_and_save(connection, engine_type, page_data, current_date):
                 count = st.get("count", 0)
                 
                 if "OPEN" in status_name:
-                    status_open = count
+                    status_open += count
                 elif "DRAFT" in status_name:
-                    status_draft = count
+                    status_draft += count
                 elif "SUBMITTED" in status_name:
-                    status_submitted = count
+                    status_submitted += count
                 elif "COMPLETED" in status_name or "APPROVED" in status_name:
-                    status_approved = count
+                    status_approved += count
                 elif "REJECTED" in status_name:
-                    status_rejected = count
+                    status_rejected += count
+                else:
+                    # Log status yang tidak dikenali agar bisa didiagnosis
+                    unknown_statuses.add(f"{status_name}(count={count})")
+                    print(f"  ⚠️ Status tidak dikenali: '{status_name}' count={count} "
+                          f"(email={email_pencacah}, region={region_code})")
+            
+            page_total_open += status_open
+            page_total_draft += status_draft
+            page_total_submitted += status_submitted
+            page_total_approved += status_approved
+            page_total_rejected += status_rejected
             
             rows_to_insert.append((
                 current_date, region_code, email_pencacah, 
                 total_beban, status_open, status_draft, status_submitted, status_approved, status_rejected
             ))
+    
+    # Cetak ringkasan halaman untuk verifikasi
+    print(f"    📊 Ringkasan halaman: Open={page_total_open}, Draft={page_total_draft}, "
+          f"Submitted={page_total_submitted}, Approved={page_total_approved}, Rejected={page_total_rejected}")
+    if unknown_statuses:
+        print(f"    ⚠️ Ada {len(unknown_statuses)} status tidak dikenali: {unknown_statuses}")
             
     if rows_to_insert:
         try:

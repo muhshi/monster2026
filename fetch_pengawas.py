@@ -68,7 +68,7 @@ def fetch_page_selenium(driver, page_num, config, max_retries=3):
     payload = {
         "surveyPeriodId": api_cfg['surveyPeriodId'],
         "surveyRoleId": api_cfg['roleIdPengawas'],
-        "size": 5,
+        "size": 10,
         "page": page_num,
         "search": "",
         "target": "TARGET_ONLY",
